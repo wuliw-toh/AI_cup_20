@@ -8,6 +8,10 @@ class Entity:
         self.position = position
         self.health = health
         self.active = active
+
+    def set_squad(self,id):
+        self.squad_id = id
+
     @staticmethod
     def read_from(stream):
         id = stream.read_int()

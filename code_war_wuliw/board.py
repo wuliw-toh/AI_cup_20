@@ -1,7 +1,10 @@
 
 class Board:
+
     def __init__(self):
-        pass
+        self.value = []
+
+
 
     def test(self,str):
         print(str)

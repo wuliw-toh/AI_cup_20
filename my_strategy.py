@@ -3,10 +3,21 @@ from code_war_wuliw import *
 
 
 class MyStrategy:
+    def __init__(self):
+        self.squad = Squad(1,Vec2Int(6,6),None)
+        #ВАЖНО!!! ТУТ НЕ ДИНАМИЧЕКИЙ id
+        self.mind = Mind(1)
+
     def get_action(self, player_view, debug_interface):
         result = Action({})
 
         my_id = player_view.my_id
+        #my_list_ent = self.my_unit(player_view.entities, my_id)
+        o_m , n_m = self.mind.chek_unit(player_view.entities)
+        print(o_m)
+        print(n_m)
+
+        #Стратегия быстрого старта
         for entity in player_view.entities:
             if entity.player_id != my_id:
                 continue
@@ -40,7 +51,9 @@ class MyStrategy:
                              EntityType.RESOURCE] if entity.entity_type == EntityType.BUILDER_UNIT else [])),
                 None
             )
+
         return result
+
 
     def debug_update(self, player_view, debug_interface):
         debug_interface.send(DebugCommand.Clear())
