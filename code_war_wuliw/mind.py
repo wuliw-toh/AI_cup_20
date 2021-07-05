@@ -21,10 +21,3 @@ class Mind:
         return old_unit, new_unit
 
 
-
-"""    def my_unit(self, ent_s, id):
-        out = []
-        for ent in ent_s:
-            if ent.player_id == id:
-                out.append(ent)
-        return out"""

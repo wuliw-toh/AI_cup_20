@@ -14,11 +14,17 @@ class Squad:
         #----------------------------------------
         self.result = Action({})
 
-    def go_to_point(self,target):
+    def add_unit(self,ent):
+        if self.reception:
+            self.entities.append(ent)
+            self.population += 1
+            if self.population == MAX_PIOPLE:
+                self.reception = False
+
+    def go_to_point(self):
         for ent in self.entities:
             move_action = MoveAction(
-                Vec2Int(player_view.map_size - 1,
-                        player_view.map_size - 1),
+                self.position,
                 True,
                 True)
 
@@ -29,10 +35,11 @@ class Squad:
                 None
             )
 
-    def add_unit(self,ent):
-        if self.reception:
-            self.entities.append(ent)
-            self.population += 1
-            if self.population == MAX_PIOPLE:
-                self.reception = False
-
+    def atacka(self):
+        for ent in self.entities:
+            self.result.entity_actions[ent.id] = EntityAction(
+                None,
+                None,
+                AttackAction(None, AutoAttack(30, [EntityType.RESOURCE])),
+                None
+            )
