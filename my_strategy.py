@@ -14,13 +14,11 @@ class MyStrategy:
             self.mind.Entity_Properties = player_view.entity_properties
             self.first_config = False
 
-        i = 0
-        if i % 10 == 0:
-            self.mind.updata(player_view)
-        i+=1
+        self.mind.updata(player_view)
 
         result = Action({})
         my_id = player_view.my_id
+
 
         for entity in player_view.entities:
             if entity.player_id != my_id:
