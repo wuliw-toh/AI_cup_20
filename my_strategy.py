@@ -4,17 +4,24 @@ from code_war_wuliw import *
 
 class MyStrategy:
     def __init__(self):
-        self.squad = Squad(1,Vec2Int(3,3),None)
-        #ВАЖНО!!! ТУТ НЕ ДИНАМИЧЕКИЙ id
+        self.first_config = True
+        #ВНИМАНИЕ НЕ ДИНАМИЧНЫЙ ID
         self.mind = Mind(1)
 
     def get_action(self, player_view, debug_interface):
+        #Как то переделать в будующем
+        if self.first_config:
+            self.mind.Entity_Properties = player_view.entity_properties
+            self.first_config = False
+
+        i = 0
+        if i % 10 == 0:
+            self.mind.updata(player_view)
+        i+=1
+
         result = Action({})
         my_id = player_view.my_id
 
-
-        #print(self.squad.population, self.squad.entities)
-        #Стратегия быстрого старта
         for entity in player_view.entities:
             if entity.player_id != my_id:
                 continue
@@ -31,23 +38,17 @@ class MyStrategy:
                     True)
 
             elif properties.build is not None:
-                entity_type = properties.build.options[0]
-                current_units = 0
-                for other_entity in player_view.entities:
-                    if my_id == other_entity.player_id and other_entity.entity_type == entity_type:
-                        current_units += 1
-                if (current_units + 1) * player_view.entity_properties[entity_type].population_use <= properties.population_provide:
-                    build_action = BuildAction(
-                        entity_type,
+                build_action = BuildAction(
+                        EntityType.BUILDER_UNIT,
                         Vec2Int(entity.position.x + properties.size, entity.position.y + properties.size - 1))
 
             result.entity_actions[entity.id] = EntityAction(
                 move_action,
                 build_action,
-                AttackAction(None, AutoAttack(properties.sight_range, [
-                             EntityType.RESOURCE] if entity.entity_type == EntityType.BUILDER_UNIT else [])),
+                AttackAction(None, AutoAttack(properties.sight_range, [EntityType.RESOURCE])),
                 None
             )
+
         return result
 
 

@@ -5,18 +5,24 @@ class Mind:
         self.id = id
         self.resurse = 0
         self.name_list = []
+        #==================================
+        self.Entity_Properties = None
 
         #==================================
         self.building = []
         self.units = []
 
     def updata(self,pleer_wiew):
-        #find res
+        #определили ресус
         for pl in pleer_wiew.players:
             if pl.id == self.id:
                 self.resurse = pl.resource
 
+        #Нашли новых юнитов
         old_ent, new_ent = self.chek_unit(pleer_wiew.entities)
+        #Распределили по списками
+        self.to_list(new_ent)
+        
 
     def chek_unit(self,ent_s):
         old_unit = []
@@ -34,7 +40,9 @@ class Mind:
 
     def to_list(self,new_ent):
         for i in new_ent:
-            pass
-            #properties = player_view.entity_properties[entity.entity_type]
-            #if i.entity_type.can
+            properties = self.Entity_Properties[i.entity_type]
+            if properties.can_move:
+                self.units.append(i)
+            else:
+                self.building.append(i)
 
