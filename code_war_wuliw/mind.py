@@ -22,79 +22,8 @@ class Mind:
     def updata(self,pleer_wiew):
         self.event_cheak(pleer_wiew)
         #self.debag_print()
-
-        result = Action({})
-        kost_fix = 0
-        kost_war = True
-
-        for unit in self.units:
-            move_act = None
-            build_act = None
-            attack_act = AttackAction(None, AutoAttack(50, [EntityType.RESOURCE]))
-            fix_act = None
-
-
-            if self.need_eat:
-                self.need_eat = False
-                if len(self.building) == 1:
-                    vek_stop = Vec2Int(2,1)
-                    vek_act = Vec2Int(2,2)
-                elif len(self.building) == 2:
-                    vek_stop = Vec2Int(5,1)
-                    vek_act = Vec2Int(5,2)
-                else:
-                    vek_stop = Vec2Int(8, 1)
-                    vek_act = Vec2Int(8, 2)
-
-                move_act = MoveAction(vek_stop,True,True)
-                build_act = BuildAction(EntityType.HOUSE,vek_act)
-                attack_act = None
-
-            if self.need_fix:
-                target = None
-                for i in self.building:
-                    properties = self.Entity_Properties[i.entity_type]
-                    if properties.max_health > i.health:
-                        target = i
-                        break
-                if kost_fix < 5:
-                    move_act = MoveAction(target.position,True,True)
-                    fix_act = RepairAction(target.id)
-                    attack_act = None
-                    kost_fix += 1
-
-            if self.resurse > 500:
-                if kost_war :
-                    kost_war = False
-                    move_act = MoveAction(Vec2Int(11,10), True, True)
-                    build_act = BuildAction(EntityType.RANGED_BASE, Vec2Int(11,11))
-                    attack_act = None
-
-
-
-            result.entity_actions[unit.id] = EntityAction(
-                move_action=move_act,
-                build_action=build_act,
-                attack_action=attack_act,
-                repair_action=fix_act
-            )
-
-        for house in self.building:
-            #Внимание работает только на главном здании.
-            #Просто по кд строит рабочих
-            build_act = BuildAction(EntityType.BUILDER_UNIT,
-                                    Vec2Int(house.position.x + 5,
-                                            house.position.y + 5 - 1))
-
-
-            result.entity_actions[house.id] = EntityAction(
-                move_action=None,
-                build_action=build_act,
-                attack_action=None,
-                repair_action=None
-            )
-
-        return result
+        out = self.resurse_craft()
+        return out
 
     def chek_unit(self, ent_s):
         old_unit = []
@@ -179,6 +108,87 @@ class Mind:
             if properties.max_health > i.health:
                 self.need_fix = True
 
+    def resurse_craft(self):
+        result = Action({})
+        kost_fix = 0
+        kost_war = True
+
+        for unit in self.units:
+            move_act = None
+            build_act = None
+            attack_act = AttackAction(None, AutoAttack(50, [EntityType.RESOURCE]))
+            fix_act = None
+
+            if self.need_eat:
+                self.need_eat = False
+                if len(self.building) == 1:
+                    vek_stop = Vec2Int(2, 1)
+                    vek_act = Vec2Int(2, 2)
+                elif len(self.building) == 2:
+                    vek_stop = Vec2Int(5, 1)
+                    vek_act = Vec2Int(5, 2)
+                elif len(self.building) == 3:
+                    vek_stop = Vec2Int(8, 1)
+                    vek_act = Vec2Int(8, 2)
+                elif len(self.building) == 4:
+                    vek_stop = Vec2Int(11, 1)
+                    vek_act = Vec2Int(11, 2)
+                else:
+                    vek_stop = Vec2Int(14, 1)
+                    vek_act = Vec2Int(14, 2)
+
+                move_act = MoveAction(vek_stop, True, True)
+                build_act = BuildAction(EntityType.HOUSE, vek_act)
+                attack_act = None
+
+            if self.need_fix:
+                target = None
+                for i in self.building:
+                    properties = self.Entity_Properties[i.entity_type]
+                    if properties.max_health > i.health:
+                        target = i
+                        break
+                if kost_fix < 5:
+                    # move_act = MoveAction(target.position,True,True)
+                    move_act = MoveAction(Vec2Int(target.position.x + 1, target.position.y + 1), True, True)
+                    fix_act = RepairAction(target.id)
+                    attack_act = None
+                    kost_fix += 1
+
+            if self.resurse > 1500:
+                if kost_war:
+                    kost_war = False
+                    move_act = MoveAction(Vec2Int(11, 10), True, True)
+                    build_act = BuildAction(EntityType.RANGED_BASE, Vec2Int(11, 11))
+                    attack_act = None
+
+            result.entity_actions[unit.id] = EntityAction(
+                move_action=move_act,
+                build_action=build_act,
+                attack_action=attack_act,
+                repair_action=fix_act
+            )
+
+        for house in self.building:
+            # Внимание работает только на главном здании.
+            # Просто по кд строит рабочих
+            if len(self.units) < 20:
+                build_act = BuildAction(EntityType.BUILDER_UNIT,
+                                        Vec2Int(house.position.x + 5,
+                                                house.position.y + 5 - 1))
+            else:
+                build_act = BuildAction(EntityType.RANGED_UNIT,
+                                        Vec2Int(house.position.x + 5,
+                                                house.position.y + 5 - 1))
+
+            result.entity_actions[house.id] = EntityAction(
+                move_action=None,
+                build_action=build_act,
+                attack_action=None,
+                repair_action=None
+            )
+
+        return result
 
 
     def debag_print(self):
