@@ -19,6 +19,7 @@ class Mind:
         #==================================
         self.building = []
         self.units = []
+        self.need_barak = True
 
     def update(self,pleer_wiew):
         self.event_cheak(pleer_wiew)
@@ -114,7 +115,8 @@ class Mind:
             if self.need_eat:
                 self.need_eat = False
 
-                vek_act = self.Map.find_pos(EntityType.HOUSE)
+                vek_act = self.Map.find_pos(EntityType.HOUSE, unit.position)
+                #vek_act = self.Map.find_pos(EntityType.HOUSE, Vec2Int(5, 5))
                 vek_stop = Vec2Int(vek_act.x + 1, vek_act.y)
 
                 move_act = MoveAction(vek_stop, True, True)
@@ -135,12 +137,17 @@ class Mind:
                     attack_act = None
                     kost_fix += 1
 
-            if self.resurse > 1500 and self.resurse < 2000:
-                if kost_war:
-                    kost_war = False
-                    move_act = MoveAction(Vec2Int(11, 10), True, True)
-                    build_act = BuildAction(EntityType.RANGED_BASE, Vec2Int(11, 11))
+            if len(self.units) >= 40:
+                if self.need_barak:
+                    self.need_barak = False
+                    vek_act = self.Map.find_pos(EntityType.RANGED_BASE, unit.position)
+                    vek_stop = Vec2Int(vek_act.x + 1, vek_act.y)
+
+                    move_act = MoveAction(vek_stop, True, True)
+                    build_act = BuildAction(EntityType.RANGED_BASE, vek_act)
                     attack_act = None
+
+
 
             result.entity_actions[unit.id] = EntityAction(
                 move_action=move_act,

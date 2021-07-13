@@ -43,10 +43,10 @@ class Map_scan:
                     or ent.entity_type == EntityType.BUILDER_UNIT:
                 self.map_array[ent.position.y][ent.position.x] = 1
             else:
-                size_house = self.Entity_Properties[ent.entity_type].size
+                size_house = self.Entity_Properties[ent.entity_type].size + 2
                 for i in range(size_house):
                     for j in range(size_house):
-                        self.map_array[ent.position.y + i][ent.position.x + j] = 1
+                        self.map_array[ent.position.y + i - 1][ent.position.x + j - 1] = 1
 
     def sum_list(self,value):
         out = 0
@@ -60,10 +60,25 @@ class Map_scan:
             out[i] = out[i][dx:dx+size]
         return out
 
-    def find_pos(self, type):
+    def find_pos(self, type, unit_pos):
+        mas = []
+
         win_size = self.Entity_Properties[type].size
         for i in range(len(self.map_array) - win_size):
             for j in range(len(self.map_array[0]) - win_size):
                 if self.sum_list(self.win_list(i, j, win_size)) == 0:
-                    return Vec2Int(i, j)
-        return Vec2Int(0, 0)
+                    mas.append(Vec2Int(i, j))
+
+        if mas:
+            min = 500
+            for i in mas:
+                if min > self.dlinna(unit_pos,i):
+                    min = self.dlinna(unit_pos,i)
+                    out = i
+        else:
+            out = Vec2Int(0, 0)
+
+        return out
+
+    def dlinna(self, vek1, vek2):
+        return  abs(vek1.x - vek2.x) + abs(vek1.y - vek2.y)
