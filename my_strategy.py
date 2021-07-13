@@ -13,7 +13,7 @@ class MyStrategy:
         if self.first_config:
             self.mind.Entity_Properties = player_view.entity_properties
             self.first_config = False
-        out = self.mind.updata(player_view)
+        out = self.mind.update(player_view)
         return out
 
 

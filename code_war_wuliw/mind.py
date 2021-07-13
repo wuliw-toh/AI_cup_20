@@ -1,4 +1,5 @@
 from model import *
+from code_war_wuliw import map_scan
 
 class Mind:
     #Временные тестовые переменные
@@ -14,13 +15,15 @@ class Mind:
         self.name_list = []
         #==================================
         self.Entity_Properties = None
-
+        self.Map = map_scan.Map_scan()
         #==================================
         self.building = []
         self.units = []
 
-    def updata(self,pleer_wiew):
+    def update(self,pleer_wiew):
         self.event_cheak(pleer_wiew)
+        if self.need_eat:
+            self.Map.update(pleer_wiew)
         #self.debag_print()
         out = self.resurse_craft()
         return out
@@ -68,17 +71,6 @@ class Mind:
             self.a_lot_of_res = False
 
 
-        #Нашли новых юнитов
-        #old_ent, new_ent = self.chek_unit(pleer_wiew.entities)
-
-        #Проверка на появление юнита
-        #if new_ent:
-        #    self.new_unit = True
-        #    #распределение по спискам
-        #    self.to_list(new_ent)
-        #else:
-        #    self.new_unit = False
-
         #проверка на наличие еды
 
         my_point = []
@@ -116,26 +108,14 @@ class Mind:
         for unit in self.units:
             move_act = None
             build_act = None
-            attack_act = AttackAction(None, AutoAttack(50, [EntityType.RESOURCE]))
+            attack_act = AttackAction(None, AutoAttack(200, [EntityType.RESOURCE]))
             fix_act = None
 
             if self.need_eat:
                 self.need_eat = False
-                if len(self.building) == 1:
-                    vek_stop = Vec2Int(2, 1)
-                    vek_act = Vec2Int(2, 2)
-                elif len(self.building) == 2:
-                    vek_stop = Vec2Int(5, 1)
-                    vek_act = Vec2Int(5, 2)
-                elif len(self.building) == 3:
-                    vek_stop = Vec2Int(8, 1)
-                    vek_act = Vec2Int(8, 2)
-                elif len(self.building) == 4:
-                    vek_stop = Vec2Int(11, 1)
-                    vek_act = Vec2Int(11, 2)
-                else:
-                    vek_stop = Vec2Int(14, 1)
-                    vek_act = Vec2Int(14, 2)
+
+                vek_act = self.Map.find_pos(EntityType.HOUSE)
+                vek_stop = Vec2Int(vek_act.x + 1, vek_act.y)
 
                 move_act = MoveAction(vek_stop, True, True)
                 build_act = BuildAction(EntityType.HOUSE, vek_act)
@@ -148,14 +128,14 @@ class Mind:
                     if properties.max_health > i.health:
                         target = i
                         break
-                if kost_fix < 5:
+                if kost_fix < 3:
                     # move_act = MoveAction(target.position,True,True)
                     move_act = MoveAction(Vec2Int(target.position.x + 1, target.position.y + 1), True, True)
                     fix_act = RepairAction(target.id)
                     attack_act = None
                     kost_fix += 1
 
-            if self.resurse > 1500:
+            if self.resurse > 1500 and self.resurse < 2000:
                 if kost_war:
                     kost_war = False
                     move_act = MoveAction(Vec2Int(11, 10), True, True)
@@ -172,7 +152,7 @@ class Mind:
         for house in self.building:
             # Внимание работает только на главном здании.
             # Просто по кд строит рабочих
-            if len(self.units) < 20:
+            if len(self.units) < 300:
                 build_act = BuildAction(EntityType.BUILDER_UNIT,
                                         Vec2Int(house.position.x + 5,
                                                 house.position.y + 5 - 1))
