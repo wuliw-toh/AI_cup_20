@@ -1,5 +1,6 @@
 from model import *
 from code_war_wuliw import map_scan
+from code_war_wuliw import Mayor
 
 class Mind:
     #Временные тестовые переменные
@@ -20,6 +21,8 @@ class Mind:
         self.building = []
         self.units = []
         self.need_barak = True
+        #==========================================
+        self.mayor = Mayor(self)
 
     def update(self,pleer_wiew):
         self.event_cheak(pleer_wiew)
@@ -27,6 +30,10 @@ class Mind:
             self.Map.update(pleer_wiew)
         #self.debag_print()
         out = self.resurse_craft()
+
+        self.mayor.update(pleer_wiew)
+
+
         return out
 
     def chek_unit(self, ent_s):

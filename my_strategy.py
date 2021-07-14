@@ -8,6 +8,7 @@ class MyStrategy:
         #ВНИМАНИЕ НЕ ДИНАМИЧНЫЙ ID
         self.mind = Mind(1)
 
+
     def get_action(self, player_view, debug_interface):
         #Как то переделать в будующем
         if self.first_config:
