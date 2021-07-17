@@ -112,15 +112,23 @@ class Mind:
         result = Action({})
         kost_fix = 0
         kost_war = True
+        kost = 0
 
         for unit in self.units:
-            move_act = None
+            move_act = MoveAction(Vec2Int(70, 70), True, True)
             build_act = None
             attack_act = AttackAction(None, AutoAttack(200, [EntityType.RESOURCE]))
             fix_act = None
 
             if self.need_eat:
-                self.need_eat = False
+                if len(self.units) < 10:
+                    if kost == 3:
+                        self.need_eat = False
+                    else:
+                        kost +=1
+                else:
+                    self.need_eat = False
+
 
                 vek_act = self.Map.find_pos(EntityType.HOUSE, unit.position)
                 #vek_act = self.Map.find_pos(EntityType.HOUSE, Vec2Int(5, 5))
@@ -137,7 +145,7 @@ class Mind:
                     if properties.max_health > i.health:
                         target = i
                         break
-                if kost_fix < 3:
+                if kost_fix < 10:
                     # move_act = MoveAction(target.position,True,True)
                     move_act = MoveAction(Vec2Int(target.position.x + 1, target.position.y + 1), True, True)
                     fix_act = RepairAction(target.id)
