@@ -29,9 +29,9 @@ class Mind:
         if self.need_eat:
             self.Map.update(pleer_wiew)
         #self.debag_print()
+        self.mayor.update(pleer_wiew)
         out = self.resurse_craft()
 
-        self.mayor.update(pleer_wiew)
 
 
         return out
