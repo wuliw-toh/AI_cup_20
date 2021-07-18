@@ -121,7 +121,7 @@ class Mind:
             fix_act = None
 
             if self.need_eat:
-                if len(self.units) < 10:
+                if len(self.units) > 10:
                     if kost == 3:
                         self.need_eat = False
                     else:
