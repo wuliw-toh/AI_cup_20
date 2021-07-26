@@ -58,28 +58,34 @@ class LibView:
             eat_max += self.ent_config[hous.entity_type].population_provide
 
         self.eat = (len(self.soldiers) + len(self.builders), eat_max)
-        self.map.get_entities(player_vive.entities)
+        #Обновление карты
+        self.map.get_entities(player_vive.entities, self.ent_config)
+
+        print(self.map.map)
 
 
 class MapScan:
 
     def __init__(self):
         self.map = []
+
+    def get_entities(self, entities, ent_config):
+        self.new_mas()
+        for ent in entities:
+            if ent.entity_type == EntityType.RESOURCE \
+                    or ent.entity_type == EntityType.RANGED_UNIT \
+                    or ent.entity_type == EntityType.BUILDER_UNIT \
+                    or ent.entity_type == EntityType.MELEE_UNIT:
+                self.map[ent.position.x][ent.position.y] = int(ent.entity_type)
+            else:
+                size_house = ent_config[ent.entity_type].size
+                for i in range(size_house):
+                    for j in range(size_house):
+                        self.map[ent.position.x + i][ent.position.y + j] = int(ent.entity_type)
+
+    def new_mas(self):
+        self.map.clear()
         for i in range(code_war_wuliw.MAP_SIZE):
             self.map.append([])
             for j in range(code_war_wuliw.MAP_SIZE):
                 self.map[i].append(0)
-
-    def get_entities(self, entities, Entity_Properties):
-        for ent in entities:
-            if ent.entity_type == EntityType.RESOURCE \
-                    or ent.entity_type == EntityType.RANGED_UNIT \
-                    or ent.entity_type == EntityType.BUILDER_UNIT:
-                self.map_array[ent.position.y][ent.position.x] = 1
-            else:
-                size_house = Entity_Properties[ent.entity_type].size + 2
-                for i in range(size_house):
-                    for j in range(size_house):
-                        self.map_array[ent.position.y + i - 1][ent.position.x + j - 1] = 1
-
-

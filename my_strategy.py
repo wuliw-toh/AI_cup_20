@@ -9,7 +9,7 @@ class MyStrategy:
     def get_action(self, player_view, debug_interface):
         # мои тулзы
         self.lib.update(player_view)
-
+        #print(int(EntityType.RANGED_UNIT))
 
         # быстрый старт
         result = Action({})
