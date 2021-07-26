@@ -10,6 +10,7 @@ class MyStrategy:
         # мои тулзы
         self.lib.update(player_view)
 
+
         # быстрый старт
         result = Action({})
         my_id = player_view.my_id
