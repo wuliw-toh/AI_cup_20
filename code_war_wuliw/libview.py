@@ -61,7 +61,13 @@ class LibView:
         #Обновление карты
         self.map.get_entities(player_vive.entities, self.ent_config)
 
-        print(self.map.map)
+    def remove_builders(self, remove_ent):
+        """
+        Функция удалаяет из списка строителей переданные сущьности.
+        В процессе обработки часть строителей будет заняты.
+        """
+        for ent in remove_ent:
+            self.builders.remove(ent)
 
 
 class MapScan:
@@ -86,6 +92,5 @@ class MapScan:
     def new_mas(self):
         self.map.clear()
         for i in range(code_war_wuliw.MAP_SIZE):
-            self.map.append([])
-            for j in range(code_war_wuliw.MAP_SIZE):
-                self.map[i].append(0)
+            self.map.append([x for x in range(code_war_wuliw.MAP_SIZE)])
+

@@ -1,15 +1,18 @@
 from model import *
-from code_war_wuliw import LibView
+from code_war_wuliw import *
 
 class MyStrategy:
 
     def __init__(self):
         self.lib = LibView()
+        self.earner = Earner(self.lib)
+        self.mayor = Mayor(self.lib)
+        self.defender = Defender(self.lib)
 
     def get_action(self, player_view, debug_interface):
         # мои тулзы
         self.lib.update(player_view)
-        #print(int(EntityType.RANGED_UNIT))
+
 
         # быстрый старт
         result = Action({})
