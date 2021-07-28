@@ -1,5 +1,6 @@
 from enum import IntEnum
 
+
 class EntityType(IntEnum):
     WALL = 0
     HOUSE = 1

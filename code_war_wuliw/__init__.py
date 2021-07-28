@@ -1,4 +1,5 @@
 from .libview import LibView
+from .target_type import TargetType
 from .strategist import Strategist
 from .earner import Earner
 from .mayor import Mayor
