@@ -9,9 +9,14 @@ class Mayor:
 
     def update(self, target_list, result):
         """Реализованна логика найми рабочих но пока так себе"""
+        # На всякий случай забиваем пустые
+        self.defolt(result)
+
         for tg in target_list:
-            if tg[0] == TargetType.HIRING_BUILDER:
+            if tg[0] == TargetType.HIRING_BUILDER and not tg[3]:
                 self.hiring_b(result)
+
+
 
     def hiring_b(self, result):
         """Реализованна логика найми рабочих но пока так себе"""
@@ -26,3 +31,12 @@ class Mayor:
                     attack_action=None,
                     repair_action=None
                 )
+
+    def defolt(self, result):
+        for hous in self.link_to_lib.houses:
+            result.entity_actions[hous.id] = EntityAction(
+                move_action=None,
+                build_action=None,
+                attack_action=None,
+                repair_action=None
+            )

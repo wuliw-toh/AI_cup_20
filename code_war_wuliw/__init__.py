@@ -1,6 +1,6 @@
 from .libview import LibView
-from .event_control import EventControl
 from .target_type import TargetType
+from .event_control import EventControl
 from .strategist import Strategist
 from .earner import Earner
 from .mayor import Mayor

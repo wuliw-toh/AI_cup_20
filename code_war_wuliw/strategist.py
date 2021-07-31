@@ -1,6 +1,13 @@
 from model import *
 from code_war_wuliw import TargetType
 
+
+def end_target(target_list):
+    for i in target_list:
+        if i[3]:
+            target_list.remove(i)
+
+
 class Strategist:
 
     def __init__(self, earner, mayor, defender, attack, event):
@@ -14,8 +21,9 @@ class Strategist:
         # Внутрение тулзы стратега
         self.takt = 0
         self.targets = []
-        # Вресенное представление таргета где масив [тип работы, целевое количество, реальное количество]
-        self.targets.append([TargetType.HIRING_BUILDER, 10, 0])
+        # Вресенное представление таргета где масив
+        # [тип работы, целевое количество, реальное количество, флаг завершения]
+        self.targets.append([TargetType.HIRING_BUILDER, 10, 0, False])
 
     def update(self):
         result = Action({})
@@ -38,5 +46,6 @@ class Strategist:
         self.to_attack.update(self.targets, result)
 
         self.takt += 1
+        end_target(self.targets)
 
         return result

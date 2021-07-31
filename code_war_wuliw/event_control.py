@@ -1,4 +1,5 @@
 import copy
+from code_war_wuliw.target_type import TargetType
 
 
 class EventControl:
@@ -17,10 +18,15 @@ class EventControl:
     def first_config(self):
         self.old_lib = copy.deepcopy(self.lib)
 
-    def update(self, target_list=None):
+    def update(self, target_list):
         self.check_builder()
         self.check_houses()
         self.check_fix()
+
+        for target in target_list:
+            if target[0] == TargetType.HIRING_BUILDER:
+                self.hiring_builder(target)
+
 
         self.old_lib = copy.deepcopy(self.lib)
 
@@ -73,3 +79,8 @@ class EventControl:
             if i.health < self.lib.ent_config[i.entity_type].max_health:
                 self.need_fix_houses.append(i)
 
+    def hiring_builder(self, target):
+        # увеличиваем число юнитов
+        target[2] += len(self.new_builders)
+        # проверяем условие завершения задачи
+        target[3] = target[1] == target[2]
