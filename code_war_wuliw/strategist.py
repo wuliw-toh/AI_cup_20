@@ -10,19 +10,29 @@ class Strategist:
         self.to_mayor = mayor
         self.to_defender = defender
         self.to_attack = attack
-
+        self.to_event = event
         # Внутрение тулзы стратега
+        self.takt = 0
         self.targets = []
         # Вресенное представление таргета где масив [тип работы, целевое количество, реальное количество]
         self.targets.append([TargetType.HIRING_BUILDER, 10, 0])
 
     def update(self):
         result = Action({})
+
+        # задержка активации ивет лога так как на 0 тике он не нужен
+        if self.takt == 0:
+            self.to_event.first_config()
+        else:
+            self.to_event.update()
+
         # Мирная часть
         self.to_mayor.update(self.targets, result)
         self.to_earner.update(self.targets, result)
         # Боевая часть
         self.to_defender.update(self.targets, result)
         self.to_attack.update(self.targets, result)
+
+        self.takt += 1
 
         return result
