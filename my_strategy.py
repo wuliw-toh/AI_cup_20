@@ -9,12 +9,14 @@ class MyStrategy:
         self.mayor = Mayor(self.lib)
         self.defender = Defender(self.lib)
         self.attack = Attack(self.lib)
+        self.event = EventControl(self.lib)
 
         self.strateg = Strategist(
             earner=self.earner,
             mayor=self.mayor,
             defender=self.defender,
-            attack=self.attack
+            attack=self.attack,
+            event=self.event
         )
 
     def get_action(self, player_view, debug_interface):

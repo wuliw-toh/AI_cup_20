@@ -1,4 +1,5 @@
 from .libview import LibView
+from .event_control import EventControl
 from .target_type import TargetType
 from .strategist import Strategist
 from .earner import Earner

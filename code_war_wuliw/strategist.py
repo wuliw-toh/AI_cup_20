@@ -3,7 +3,7 @@ from code_war_wuliw import TargetType
 
 class Strategist:
 
-    def __init__(self, earner, mayor, defender, attack):
+    def __init__(self, earner, mayor, defender, attack, event):
 
         # сылки на исполнителей
         self.to_earner = earner
