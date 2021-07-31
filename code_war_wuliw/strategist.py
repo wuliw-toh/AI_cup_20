@@ -24,7 +24,11 @@ class Strategist:
         if self.takt == 0:
             self.to_event.first_config()
         else:
-            self.to_event.update()
+            # мы проверяем старые задачи
+            self.to_event.update(target_list=self.targets)
+
+        # тут большая часть с постановкой задач
+
 
         # Мирная часть
         self.to_mayor.update(self.targets, result)
