@@ -1,6 +1,6 @@
 from code_war_wuliw import TargetType
 from model import *
-
+from code_war_wuliw.libview import dlinna
 
 class Mayor:
 
@@ -15,11 +15,12 @@ class Mayor:
         for tg in target_list:
             if tg[3]:
                 continue
-
             if tg[0] == TargetType.HIRING_BUILDER:
                 self.hiring_b(result)
             elif tg[0] == TargetType.HIRING_RANGED:
                 self.hiring_r(result)
+            elif tg[0] == TargetType.BUILDING_HOUSE:
+                self.building_house(result)
 
     def hiring_b(self, result):
         """Реализованна логика найми рабочих но пока так себе"""
@@ -47,6 +48,24 @@ class Mayor:
                     attack_action=None,
                     repair_action=None
                 )
+
+    def building_house(self, result):
+        target = self.link_to_lib.map.find_position(5)
+        min_len = 500
+        unit = self.link_to_lib.builders[0]
+
+        for bul in self.link_to_lib.builders:
+            if dlinna(bul.position, target) < min_len:
+                unit = bul
+
+        result.entity_actions[unit.id] = EntityAction(
+            move_action=MoveAction(target, True, True),
+            build_action=BuildAction(EntityType.HOUSE, Vec2Int(target.x + 1, target.y + 1)),
+            attack_action=None,
+            repair_action=None
+        )
+
+        #self.link_to_lib.remove_builders([unit])
 
     def defolt(self, result):
         for hous in self.link_to_lib.houses:

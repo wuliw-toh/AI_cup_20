@@ -23,7 +23,7 @@ class Strategist:
         self.targets = []
         # Вресенное представление таргета где масив
         # [тип работы, целевое количество, реальное количество, флаг завершения]
-        self.targets.append([TargetType.HIRING_BUILDER, 10, 1, False])
+        self.targets.append([TargetType.HIRING_BUILDER, 5, 1, False])
         self.targets.append([TargetType.HIRING_RANGED, 1000, 1, False])
 
     def update(self):
@@ -37,11 +37,13 @@ class Strategist:
             self.to_event.update(target_list=self.targets)
 
         # тут большая часть с постановкой задач
-
+        #if self.takt > 30:
+        #    self.targets.append([TargetType.BUILDING_HOUSE, 1, 0, False])
 
         # Мирная часть
-        self.to_mayor.update(self.targets, result)
+        # Пока поменял местами но это костыль
         self.to_earner.update(self.targets, result)
+        self.to_mayor.update(self.targets, result)
         # Боевая часть
         self.to_defender.update(self.targets, result)
         self.to_attack.update(self.targets, result)

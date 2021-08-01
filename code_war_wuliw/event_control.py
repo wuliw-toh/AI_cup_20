@@ -22,11 +22,16 @@ class EventControl:
         self.check_builder()
         self.check_houses()
         self.check_fix()
+        self.check_solder()
 
         for target in target_list:
             if target[0] == TargetType.HIRING_BUILDER:
                 self.hiring_builder(target)
-
+            elif target[0] == TargetType.HIRING_RANGED:
+                # увеличиваем число юнитов
+                target[2] += len(self.new_soldiers)
+                # проверяем условие завершения задачи
+                target[3] = target[1] <= target[2]
 
         self.old_lib = copy.deepcopy(self.lib)
 
@@ -84,3 +89,25 @@ class EventControl:
         target[2] += len(self.new_builders)
         # проверяем условие завершения задачи
         target[3] = target[1] == target[2]
+
+    def check_solder(self):
+        """Формируем два списка нанятых строителей и убитых солдат"""
+        n_set = set([x.id for x in self.lib.soldiers])
+        o_set = set([x.id for x in self.old_lib.soldiers])
+
+        self.new_soldiers = []
+        self.dead_soldiers = []
+
+        new_chek = n_set - o_set
+        if new_chek:
+            for i in new_chek:
+                for bl in self.lib.soldiers:
+                    if bl.id == i:
+                        self.new_soldiers.append(bl)
+
+        dead_chek = o_set - n_set
+        if dead_chek:
+            for i in dead_chek:
+                for bl in self.old_lib.soldiers:
+                    if bl.id == i:
+                        self.dead_builders.append(bl)
