@@ -51,7 +51,6 @@ class LibView:
         self.builders = find_ent_type(player_vive.entities, [EntityType.BUILDER_UNIT], self.my_id)
         self.soldiers = find_ent_type(player_vive.entities, [EntityType.RANGED_UNIT, EntityType.MELEE_UNIT], self.my_id)
         self.houses = find_house(player_vive.entities, self.my_id, self.ent_config)
-
         # Определение еды
         eat_max = 0
         for hous in self.houses:

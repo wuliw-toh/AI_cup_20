@@ -23,7 +23,8 @@ class Strategist:
         self.targets = []
         # Вресенное представление таргета где масив
         # [тип работы, целевое количество, реальное количество, флаг завершения]
-        self.targets.append([TargetType.HIRING_BUILDER, 10, 0, False])
+        self.targets.append([TargetType.HIRING_BUILDER, 10, 1, False])
+        self.targets.append([TargetType.HIRING_RANGED, 1000, 1, False])
 
     def update(self):
         result = Action({})

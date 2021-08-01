@@ -13,10 +13,13 @@ class Mayor:
         self.defolt(result)
 
         for tg in target_list:
-            if tg[0] == TargetType.HIRING_BUILDER and not tg[3]:
+            if tg[3]:
+                continue
+
+            if tg[0] == TargetType.HIRING_BUILDER:
                 self.hiring_b(result)
-
-
+            elif tg[0] == TargetType.HIRING_RANGED:
+                self.hiring_r(result)
 
     def hiring_b(self, result):
         """Реализованна логика найми рабочих но пока так себе"""
@@ -26,6 +29,19 @@ class Mayor:
                     move_action=None,
                     build_action=BuildAction(
                         EntityType.BUILDER_UNIT,
+                        # Вот тут кафики фикированой точки, но по уму надо выбирать позицию
+                        Vec2Int(hous.position.x + 5, hous.position.y + 5 - 1)),
+                    attack_action=None,
+                    repair_action=None
+                )
+
+    def hiring_r(self, result):
+        for hous in self.link_to_lib.houses:
+            if hous.entity_type == EntityType.RANGED_BASE:
+                result.entity_actions[hous.id] = EntityAction(
+                    move_action=None,
+                    build_action=BuildAction(
+                        EntityType.RANGED_UNIT,
                         # Вот тут кафики фикированой точки, но по уму надо выбирать позицию
                         Vec2Int(hous.position.x + 5, hous.position.y + 5 - 1)),
                     attack_action=None,
