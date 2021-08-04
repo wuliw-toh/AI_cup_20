@@ -21,6 +21,9 @@ class Mayor:
                 self.hiring_r(result)
             elif tg[0] == TargetType.BUILDING_HOUSE:
                 self.building_house(result)
+            elif tg[0] == TargetType.FIX_HOUSE:
+                self.fix_work(result, tg[1], tg[2])
+                tg[3] = True
 
     def hiring_b(self, result):
         """Реализованна логика найми рабочих но пока так себе"""
@@ -60,12 +63,11 @@ class Mayor:
 
         result.entity_actions[unit.id] = EntityAction(
             move_action=MoveAction(target, True, True),
-            build_action=BuildAction(EntityType.HOUSE, Vec2Int(target.x + 1, target.y + 1)),
+            build_action=BuildAction(EntityType.HOUSE, Vec2Int(target.x + 1, target.y)),
             attack_action=None,
             repair_action=None
         )
-
-        #self.link_to_lib.remove_builders([unit])
+        self.link_to_lib.remove_builders([unit])
 
     def defolt(self, result):
         for hous in self.link_to_lib.houses:
@@ -75,3 +77,15 @@ class Mayor:
                 attack_action=None,
                 repair_action=None
             )
+
+    def fix_work(self, result, id_t, kol_unit):
+        max_unit = kol_unit
+
+        for i in range(max_unit):
+            result.entity_actions[self.link_to_lib.builders[i].id] = EntityAction(
+                move_action=None,
+                build_action=None,
+                attack_action=None,
+                repair_action=RepairAction(id_t)
+            )
+            self.link_to_lib.remove_builders([self.link_to_lib.builders[i]])

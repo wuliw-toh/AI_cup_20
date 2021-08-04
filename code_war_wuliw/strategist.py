@@ -23,8 +23,6 @@ class Strategist:
         self.targets = []
         # Вресенное представление таргета где масив
         # [тип работы, целевое количество, реальное количество, флаг завершения]
-        self.targets.append([TargetType.HIRING_BUILDER, 5, 1, False])
-        self.targets.append([TargetType.HIRING_RANGED, 1000, 1, False])
 
     def update(self):
         result = Action({})
@@ -37,13 +35,26 @@ class Strategist:
             self.to_event.update(target_list=self.targets)
 
         # тут большая часть с постановкой задач
-        #if self.takt > 30:
-        #    self.targets.append([TargetType.BUILDING_HOUSE, 1, 0, False])
+        if self.takt == 0:
+            self.targets.append([TargetType.HIRING_BUILDER, 5, 1, False])
+        elif self.takt == 15:
+            self.targets.append([TargetType.HIRING_RANGED, 5, 1, False])
+        elif self.takt == 20:
+            self.targets.append([TargetType.HIRING_BUILDER, 5, 1, False])
+            self.targets.append([TargetType.BUILDING_HOUSE, 4, 0, False])
+        elif self.takt == 150:
+            self.targets.append([TargetType.HIRING_RANGED, 100, 0, False])
+
+        # остановка задачи по починке
+        if self.to_event.need_fix_houses:
+            for i in self.to_event.need_fix_houses:
+                # [тип задачи, целевой id, число выделеных рабочих, статус задачи]
+                self.targets.append([TargetType.FIX_HOUSE, i.id, 3, False])
+
 
         # Мирная часть
-        # Пока поменял местами но это костыль
-        self.to_earner.update(self.targets, result)
         self.to_mayor.update(self.targets, result)
+        self.to_earner.update(self.targets, result)
         # Боевая часть
         self.to_defender.update(self.targets, result)
         self.to_attack.update(self.targets, result)

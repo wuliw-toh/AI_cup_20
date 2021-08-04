@@ -24,6 +24,8 @@ class EventControl:
         self.check_fix()
         self.check_solder()
 
+        #print(self.need_fix_houses)
+
         for target in target_list:
             if target[0] == TargetType.HIRING_BUILDER:
                 self.hiring_builder(target)

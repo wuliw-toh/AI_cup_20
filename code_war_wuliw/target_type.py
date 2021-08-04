@@ -7,3 +7,4 @@ class TargetType(IntEnum):
     HIRING_RANGED = 1
     BUILDING_HOUSE = 2
     BUILDER_R_BASE = 3
+    FIX_HOUSE = 4
